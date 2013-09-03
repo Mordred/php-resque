@@ -472,7 +472,7 @@ class Resque_Worker
 	public function registerWorker()
 	{
 		Resque::redis()->sadd('workers', (string)$this);
-		Resque::redis()->set('worker:' . (string)$this . ':started', strftime('%a %b %d %H:%M:%S %Z %Y'));
+		Resque::redis()->set('worker:' . (string)$this . ':started', date('c'));
 	}
 
 	/**
@@ -504,7 +504,7 @@ class Resque_Worker
 		$job->updateStatus(Resque_Job_Status::STATUS_RUNNING);
 		$data = json_encode(array(
 			'queue' => $job->queue,
-			'run_at' => strftime('%a %b %d %H:%M:%S %Z %Y'),
+			'run_at' => date('c'),
 			'payload' => $job->payload
 		));
 		Resque::redis()->set('worker:' . $job->worker, $data);
@@ -569,4 +569,3 @@ class Resque_Worker
 		$this->logger = $logger;
 	}
 }
-?>
